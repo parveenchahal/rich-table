@@ -27,11 +27,11 @@ function init() {
 
   var i;
   for (i = 0; i < arr.length; i++) {
-    out += '<li class="nav-item active">' +
+    out += '<li class="nav-item">' +
       '<a href="' + arr[i].url + '" class="nav-link">' +
       arr[i].display + '</a></li>';
   }
   document.getElementById("upper-menu").innerHTML = out;
 
 }
-window.onload = init;
+document.getElementById("upper-menu").onload = init();
