@@ -1,0 +1,3 @@
+from operations import abstract_operations, menu_operations
+Operations = abstract_operations.Operations
+MenuOperations = menu_operations.MenuOperations

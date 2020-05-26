@@ -1,0 +1,2 @@
+from controllers import menu_controller
+MenuController = menu_controller.MenuController
