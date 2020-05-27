@@ -1,3 +1,2 @@
-from models import abstract_model, menu_model
-MenuModel = menu_model.MenuModel
-MenuSchema = menu_model.MenuSchema
+from models.abstract_model import Model
+from models.menu_model import MenuModel, MenuSchema
