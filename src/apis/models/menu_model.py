@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class MenuModel(Model):
-    query = "SELECT id, name, product_id, price from menu"
+    select_query = "SELECT id, name, product_id, price from menu"
 
     # attributes
     id: int

@@ -7,5 +7,5 @@ class MenuOperations(Operations):
         super().__init__(db_operations)
 
     def get_all(self):
-        query_result = self.db_operations.execute_query(MenuModel.query)
+        query_result = self.db_operations.execute_query(MenuModel.select_query)
         return MenuModel.deserialize(query_result, MenuModel)
