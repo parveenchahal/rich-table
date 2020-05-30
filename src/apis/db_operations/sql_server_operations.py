@@ -1,4 +1,14 @@
 from db_operations.abstract_db_operations import DbOperations
-class SQLServerOperations(DbOperations):
-    def query_all(self, model, schema):
-        return schema(many=True).dump(model.query.all())
+class SqlServerOperations(DbOperations):
+
+    def __init__(self, engine):
+        super().__init__(engine)
+        pass
+
+    def execute_query(self, query):
+        with self.engine.connect() as connection:
+            query_result = connection.execute(query).fetchall()
+            return self.__convert_to_list_of_dict__(query_result)
+
+    def __convert_to_list_of_dict__(self, query_data_rows):
+        return ([dict(row) for row in query_data_rows])

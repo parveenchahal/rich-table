@@ -1,11 +1,11 @@
 from flask_restful import Resource
-from operations import MenuOperations
+from flask import jsonify
 
 class MenuController(Resource):
 
-    def __init__(self, *args):
-        self.db_operations = args[0]
-        self.operations = MenuOperations(self.db_operations)
+    def __init__(self, operations):
+        self.operations = operations
 
     def get(self):
-        return self.operations.get_complete_menu()
+        menus = self.operations.get_all()
+        return jsonify([row.__dict__ for row in menus])

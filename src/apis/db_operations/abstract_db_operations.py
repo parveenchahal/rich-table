@@ -1,6 +1,3 @@
-from abc import abstractmethod
-class DbOperations(object):
-    
-    @abstractmethod
-    def query_all(self, model, schema):
-        raise NotImplementedError()
+class DbOperations():
+    def __init__(self, engine):
+        self.engine = engine

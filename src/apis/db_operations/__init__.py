@@ -1,2 +1,2 @@
 from db_operations.abstract_db_operations import DbOperations
-from db_operations.sql_server_operations import SQLServerOperations
+from db_operations.sql_server_operations import SqlServerOperations
