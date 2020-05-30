@@ -6,8 +6,8 @@ class MenuModel(Model):
     query = "SELECT id, name, product_id, price from menu"
 
     # attributes
-    id: str
-    name: int
-    product_id: str
+    id: int
+    name: str
+    product_id: int
     price: float
     
