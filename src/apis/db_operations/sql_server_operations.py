@@ -6,8 +6,9 @@ class SqlServerOperations(DbOperations):
         pass
 
     def execute_query(self, query):
-        query_result = self.execute.fetchall()
-        return self.__convert_to_list_of_dict__(query_result)
+        with self.engine.connect() as connection:    
+            query_result = connection.execute(query).fetchall()
+            return self.__convert_to_list_of_dict__(query_result)
 
     def insert(self, model_obj):
         keys_list = list()

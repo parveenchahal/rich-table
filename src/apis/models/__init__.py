@@ -1,2 +1,3 @@
-from models.abstract_model import Model
-from models.menu_model import MenuModel
+from models import db_models
+from models import view_models
+

@@ -8,7 +8,7 @@ class MenuController(Resource):
 
     def get(self):
         menus = self.operations.get_all()
-        return output_json(menus, 200)
+        return output_json(menus, 200, {'Content-Type': 'application/json'})
 
     def post(self):
         json_data = request.get_json(force=True)

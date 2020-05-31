@@ -2,13 +2,11 @@ from models.abstract_model import Model
 from dataclasses import dataclass
 
 @dataclass
-class MenuModel(Model):
+class MenuCategoryDbModel(Model):
 
-    __tablename__ = 'menu'
+    __tablename__ = 'menu_category'
 
     # attributes
     name: str
-    category_id: int
-    price: float
     id: int = None
     
