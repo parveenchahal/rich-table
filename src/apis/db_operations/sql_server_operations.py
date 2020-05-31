@@ -1,9 +1,12 @@
 from db_operations.abstract_db_operations import DbOperations
 class SqlServerOperations(DbOperations):
 
-    def __init__(self, engine):
-        super().__init__(engine)
-        pass
+    def __init__(self, db):
+        self.db = db
+
+    @property
+    def engine(self):
+        return self.db.engine
 
     def execute_query(self, query):
         with self.engine.connect() as connection:

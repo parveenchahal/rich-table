@@ -8,4 +8,8 @@ class MenuController(Resource):
 
     def get(self):
         menus = self.operations.get_all()
-        return jsonify([row.__dict__ for row in menus])
+        return jsonify(menus)
+    
+    def post(self):
+        menus = self.operations.get_all()
+        return jsonify(menus)

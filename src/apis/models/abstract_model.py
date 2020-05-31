@@ -1,17 +1,12 @@
-from dataclasses import dataclass, fields
+from flask_sqlalchemy import declarative_base
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, MetaData
+from flask_sqlalchemy import SQLAlchemy
 
-@dataclass
-class Model(object):
-    @staticmethod
-    def deserialize(list_of_dict, model_class_ref):
-        return ([model_class_ref(**item) for item in list_of_dict])
+db = SQLAlchemy()
+BaseModel = db.Model
 
-    def validate_type(self):
-        for field in fields(self):
-            attr = getattr(self, field.name)
-            if not isinstance(attr, field.type):
-                error_msg = "Expected type of {0.name} is {1}, given {0.type}".format(field, type(attr))
-                raise ValueError(error_msg)
-
-    def __post_init__(self):
-        self.validate_type()
+def init_db(app):
+    with app.app_context():
+        db.init_app(app)
+        db.create_all()
+    return db

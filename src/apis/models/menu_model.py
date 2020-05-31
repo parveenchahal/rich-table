@@ -1,13 +1,9 @@
-from models.abstract_model import Model
-from dataclasses import dataclass
+from models.abstract_model import BaseModel, Column, Integer, String, Float, ForeignKey
 
-@dataclass
-class MenuModel(Model):
-    select_query = "SELECT id, name, product_id, price from menu"
+class MenuModel(BaseModel):
+    __tablename__ = 'menu'
 
-    # attributes
-    id: int
-    name: str
-    product_id: int
-    price: float
-    
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    category_id = Column(Integer, ForeignKey("menu_category.id"))
+    price = Column(Float)
