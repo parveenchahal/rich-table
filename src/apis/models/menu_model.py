@@ -3,11 +3,12 @@ from dataclasses import dataclass
 
 @dataclass
 class MenuModel(Model):
-    select_query = "SELECT id, name, product_id, price from menu"
+
+    __tablename__ = 'menu'
 
     # attributes
-    id: int
     name: str
-    product_id: int
+    category_id: int
     price: float
+    id: int = None
     

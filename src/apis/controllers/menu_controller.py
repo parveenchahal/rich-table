@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from flask_restful import Resource, reqparse, request, output_json
 from flask import jsonify
 
 class MenuController(Resource):
@@ -8,4 +8,10 @@ class MenuController(Resource):
 
     def get(self):
         menus = self.operations.get_all()
-        return jsonify([row.__dict__ for row in menus])
+        return output_json(menus, 200)
+
+    def post(self):
+        json_data = request.get_json(force=True)
+        print(json_data)
+        self.operations.insert(json_data)
+        return None, 201
