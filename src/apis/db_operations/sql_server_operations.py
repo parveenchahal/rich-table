@@ -13,6 +13,10 @@ class SqlServerOperations(DbOperations):
     def insert(self, model_obj):
         keys_list = list()
         values_list = list()
+        
+        # Removing primary key(assuming always as id)
+        # This code is temporary need to fix it.
+        model_obj.id = None
         for key in model_obj.__dict__:
             if(model_obj.__dict__[key] is not None):
                 keys_list.append(key)

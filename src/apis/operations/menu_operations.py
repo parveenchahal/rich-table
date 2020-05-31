@@ -1,5 +1,5 @@
 from operations.abstract_operations import Operations
-from models.db_models import MenuDbModel
+from models.db_models import MenuItemsDbModel
 from models.view_models import MenuViewModel
 
 class MenuOperations(Operations):
@@ -8,7 +8,7 @@ class MenuOperations(Operations):
         super().__init__(db_operations)
 
     def insert(self, json_string):
-        return self.db_operations.insert(MenuDbModel(**dict(json_string)))
+        return self.db_operations.insert(MenuItemsDbModel(**dict(json_string)))
 
     def get_all(self):
         query_result = self.db_operations.execute_query(MenuViewModel.__query__)
