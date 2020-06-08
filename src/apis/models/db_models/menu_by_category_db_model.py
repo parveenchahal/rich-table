@@ -1,13 +1,11 @@
-from models.abstract_model import Model
-from dataclasses import dataclass
+from sqlalchemy import Column, Integer, String, ForeignKey
+from models.db_models.db_model import DbModel
+from models.db_models.menu_category_db_model import MenuCategoryDbModel
+from models.db_models.menu_items_db_model import MenuItemsDbModel
 
-@dataclass
-class MenuByCategoryDbModel(Model):
-
+class MenuByCategoryDbModel(DbModel):
     __tablename__ = 'menu_by_category'
-
-    # attributes
-    menu_category_id: int
-    menu_item_id: int
-    id: int = None
+    id = Column(Integer, primary_key=True)
+    menu_category_id = Column(Integer, ForeignKey("{0}.id".format(MenuCategoryDbModel.__tablename__)))
+    menu_item_id = Column(Integer, ForeignKey("{0}.id".format(MenuItemsDbModel.__tablename__)))
     

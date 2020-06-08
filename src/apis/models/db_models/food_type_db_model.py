@@ -1,13 +1,9 @@
-from models.abstract_model import Model
-from dataclasses import dataclass
+from sqlalchemy import Column, Integer, String
+from models.db_models.db_model import DbModel
 
-@dataclass
-class FoodTypeDbModel(Model):
-
+class FoodTypeDbModel(DbModel):
     __tablename__ = 'food_type'
 
-    # attributes
-    name: str
-    short_name: str
-    id: int = None
-    
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    short_name = Column(String)

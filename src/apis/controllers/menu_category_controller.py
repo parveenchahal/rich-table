@@ -1,4 +1,4 @@
 from controllers import Controller
 
-class MenuController(Controller):
+class MenuCategoryController(Controller):
     pass

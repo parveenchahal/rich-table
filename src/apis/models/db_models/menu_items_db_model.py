@@ -1,15 +1,11 @@
-from models.abstract_model import Model
-from dataclasses import dataclass
+from sqlalchemy import Column, Integer, String, Float
+from models.db_models.db_model import DbModel
 
-@dataclass
-class MenuItemsDbModel(Model):
-
+class MenuItemsDbModel(DbModel):
     __tablename__ = 'menu_items'
 
-    # attributes
-    name: str
-    price: float
-    image_url: str
-    description: str
-    id: int = None
-    
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    price = Column(Float)
+    image_url = Column(String)
+    description = Column(String)

@@ -1,2 +1,4 @@
-from operations.menu_operations import MenuOperations
 from operations.abstract_operations import Operations
+from operations.menu_operations import MenuOperations
+from operations.food_type_operations import FoodTypeOperations
+from operations.menu_category_operations import MenuCategoryOperations

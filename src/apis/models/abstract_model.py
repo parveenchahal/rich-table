@@ -1,16 +1,31 @@
-from dataclasses import dataclass, fields
+from sqlalchemy.orm.state import InstanceState
+import copy
+from json import JSONEncoder 
+from dataclasses import fields
 from flask import jsonify
 
-@dataclass
 class Model(object):
 
     @staticmethod
-    def deserialize(list_of_dict, model_class_ref):
-        return ([model_class_ref(**item) for item in list_of_dict])
+    def to_obj(dict, model_class_ref):
+        return model_class_ref(**dict)
 
     @staticmethod
-    def serialize(data_list):
-        return ([row.__dict__ for row in data_list]) 
+    def to_obj_list(list_of_dict, model_class_ref):
+        return ([model_class_ref.to_obj(item) for item in list_of_dict])
+    
+    def to_dict(self):
+        d = copy.deepcopy(self.__dict__)
+        try:
+            if(isinstance(d['_sa_instance_state'], InstanceState)):
+                del d['_sa_instance_state']
+        except:
+            pass
+        return d
+
+    @staticmethod
+    def to_dict_list(model_obj_list):
+        return ([model_obj.to_dict() for model_obj in model_obj_list])
 
     def validate_type(self):
         for field in fields(self):
