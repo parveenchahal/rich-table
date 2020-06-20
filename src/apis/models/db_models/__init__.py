@@ -1,4 +1,5 @@
 from models.abstract_model import Model
+from models.db_models.db_model import DbModel
 from models.db_models.food_type_db_model import FoodTypeDbModel
 from models.db_models.menu_by_category_db_model import MenuByCategoryDbModel
 from models.db_models.menu_by_food_type_db_model import MenuByFoodTypeDbModel

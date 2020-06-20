@@ -14,7 +14,11 @@ api = Api(app)
 params = urllib.parse.quote_plus("DRIVER={ODBC Driver 17 for SQL Server};SERVER=pc-sql01.database.windows.net;DATABASE=pc-sql01;UID=pc;PWD=richtable123*#")
 conn_str = "mssql+pyodbc:///?odbc_connect=%s" % params
 
-engine = create_engine(conn_str)
+app.config["SQLALCHEMY_DATABASE_URI"] = conn_str
+db.init_app(app)
+
+engine = db.get_engine(app)
+
 db_operations = SqlServerOperations(engine)
 
 menu_operations = MenuOperations(db_operations)
@@ -29,6 +33,5 @@ api.add_resource(MenuCategoryController, '/api/menu_category', resource_class_ar
 
 if __name__ == '__main__':
     with app.app_context():
-        db.init_app(app)
         db.create_all()
     app.run(debug=True)
