@@ -16,26 +16,42 @@ class MenuOperations(Operations):
         del json_obj['food_type']
 
         session = self.db_operations.create_session()
-        #return json_obj
-        menu_item = MenuItemsDbModel(**dict(json_obj))
+        try:
+            menu_item = MenuItemsDbModel(**dict(json_obj))
+            
+            session.add(menu_item)
+            session.flush()
 
-        session.add(menu_item)
+            if(menu_item.id is None):
+                raise 'Can not write in {0} table'.format(MenuItemsDbModel.__tablename__)
 
-        if(menu_item.id is None):
-            raise 'Can not write in menu_items table'
+            menu_category = [MenuByCategoryDbModel(menu_category_id=x, menu_item_id=menu_item.id) for x in menu_category]
+            food_type = [MenuByFoodTypeDbModel(food_type_id=x, menu_item_id=menu_item.id) for x in food_type]
+            
+            for x in menu_category:
+                session.add(x)
 
-        for x in menu_category:
-            session.add(MenuByCategoryDbModel(menu_category_id=x, menu_item_id=menu_item.id))
+            for x in food_type:
+                session.add(x)
 
-        for x in food_type:
-            session.add(MenuByFoodTypeDbModel(food_type_id=x, menu_item_id=menu_item.id))
+            session.flush()
 
-        session.commit()
-        return menu_item.id
+            for x in menu_category:
+                if(x.id is None):
+                    raise "Error writing in {0}".format(MenuByCategoryDbModel.__tablename__)
 
-    def update(self, json_string):
-        data_dict = dict(json_string)
-        menu_category = list()
+            for x in food_type:
+                if(x.id is None):
+                    raise "Error writing in {0}".format(MenuByFoodTypeDbModel.__tablename__)
+
+            session.commit()
+            return menu_item.id
+        except:
+            session.rollback()
+            raise
+
+    def update(self, json_obj):
+        pass
 
     def get_all(self):
         quert_result = self.db_operations.execute_query(MenuViewModel.__query__)
