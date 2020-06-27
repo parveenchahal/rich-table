@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_restful import Api, Resource
 
@@ -10,8 +11,8 @@ from db_operations import SqlServerOperations
 
 app = Flask(__name__)
 api = Api(app)
-
-params = urllib.parse.quote_plus("DRIVER={ODBC Driver 17 for SQL Server};SERVER=pc-sql01.database.windows.net;DATABASE=pc-sql01;UID=pc;PWD=richtable123*#")
+sql_db_password = os.environ['RICHTABLE_SQL_PASS']
+params = urllib.parse.quote_plus("DRIVER={ODBC Driver 17 for SQL Server};SERVER=pc-sql01.database.windows.net;DATABASE=pc-sql01;UID=pc;PWD=" + sql_db_password)
 conn_str = "mssql+pyodbc:///?odbc_connect=%s" % params
 
 app.config["SQLALCHEMY_DATABASE_URI"] = conn_str
