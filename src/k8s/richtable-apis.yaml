@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: richtable-apis-1
-        image: pchahal24/rich-table:jun22
+        image: pchahal24/rich-table:jun28
         imagePullPolicy: Always
         ports:
           - name: port-5000
@@ -61,3 +61,14 @@ spec:
   selector:
     run: richtable-apis
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aad-identity-service
+  namespace: richtable
+spec:
+  type: ExternalName
+  externalName: aad-identity-service.default.svc.cluster.local
+  ports:
+  - port: 2424
