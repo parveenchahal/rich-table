@@ -21,6 +21,13 @@ spec:
           - name: port-5000
             containerPort: 5000
             protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 300m
+            memory: 256Mi
         env:
         - name: AAD_IDENTITY_SECRET
           valueFrom:
