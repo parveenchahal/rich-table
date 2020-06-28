@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apis
+  namespace: richtable
+spec:
+  selector:
+      matchLabels:
+        run: richtable-apis
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: richtable-apis
+    spec:
+      containers:
+      - name: richtable-apis-1
+        image: pchahal24/rich-table:jun22
+        imagePullPolicy: Always
+        ports:
+          - name: port-5000
+            containerPort: 5000
+            protocol: TCP
+        env:
+        - name: AAD_IDENTITY_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: pc-identity
+              key: key
+        - name: AAD_IDENTITY_TENANT
+          valueFrom:
+            secretKeyRef:
+              name: pc-identity
+              key: tenant
+        - name: AAD_IDENTITY_CLIENTID
+          valueFrom:
+            secretKeyRef:
+              name: pc-identity
+              key: clientId
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: richtable-apis-service
+  namespace: richtable
+  labels:
+    app: richtable-apis
+spec:
+  ports:
+  - port: 5000
+    protocol: TCP
+    name: port-5000
+    targetPort: 5000
+  selector:
+    run: richtable-apis
+  type: ClusterIP

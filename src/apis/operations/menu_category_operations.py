@@ -9,14 +9,12 @@ class MenuCategoryOperations(Operations):
     def insert(self, json_obj):
         # removing this because it is auto generated.
         json_obj['id'] = None
-        session = self.db_operations.create_session()
         menu_category = MenuCategoryDbModel(**dict(json_obj))
-        session.add(menu_category)
-        session.commit()
+        super().insert(menu_category)
         return menu_category.id
 
     def get_all(self):
-        session = self.db_operations.create_session()
-        quert_result = session.query(MenuCategoryDbModel).all()
-        return quert_result
+        return super().get_all(MenuCategoryDbModel)
 
+    def delete(self, id):
+        super().delete(MenuCategoryDbModel, MenuCategoryDbModel.id == id)
