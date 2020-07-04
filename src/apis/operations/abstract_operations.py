@@ -1,3 +1,5 @@
+from models.db_models import MenuCategoryDbModel
+
 class Operations(object):
     def __init__(self, db_operations):
         self.db_operations = db_operations
@@ -14,8 +16,17 @@ class Operations(object):
 
     def delete(self, model, filter_param):
         session = self.db_operations.create_session()
-        row = session.query(model).filter(filter_param)
-        if(row):
-            raise str(row)
-        row.delete()
+        row = session.query(model).filter(filter_param).first()
+        if(not row):
+            raise KeyError("id not found")
+        session.delete(row)
+        session.commit()
+
+    def delete_all(self, model, filter_param):
+        session = self.db_operations.create_session()
+        rows = session.query(model).filter(filter_param).all()
+        if(not rows):
+            raise KeyError("id not found")
+        for row in rows:
+            session.delete(row)
         session.commit()

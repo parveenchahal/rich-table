@@ -53,6 +53,14 @@ class MenuOperations(Operations):
     def update(self, json_obj):
         pass
 
+    def delete(self, id):
+        try:
+            super().delete_all(MenuByCategoryDbModel, MenuByCategoryDbModel.menu_item_id == id)
+            super().delete_all(MenuByFoodTypeDbModel, MenuByFoodTypeDbModel.menu_item_id == id)
+        except:
+            pass
+        super().delete_all(MenuItemsDbModel, MenuItemsDbModel.id == id)
+
     def get_all(self):
         quert_result = self.db_operations.execute_query(MenuViewModel.__query__)
         result = MenuViewModel.parse_query_output(quert_result)
