@@ -5,7 +5,7 @@ accesstoken=$(curl -sS $identity_url | jq -r '.access_token')
 
 secret_name="richtable-sql-connection-params"
 echo "Fetching secret $secret_name from keyvault..."
-pwd=$(curl -sS "https://pckv1.vault.azure.net/secrets/$secret_name?api-version=2016-10-01" -H "Authorization: Bearer $accesstoken" | jq -r '.value' | base64 -d )
-export RICHTABLE_SQL_CONNECTION_PARAMS=$pwd
+connection_params=$(curl -sS "https://pckv1.vault.azure.net/secrets/$secret_name?api-version=2016-10-01" -H "Authorization: Bearer $accesstoken" | jq -r '.value')
+export RICHTABLE_SQL_CONNECTION_PARAMS="$connection_params"
 
 python api.py

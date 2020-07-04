@@ -14,8 +14,8 @@ from db_operations import SqlServerOperations
 app = Flask(__name__)
 api = Api(app)
 
-params = urllib.parse.quote_plus(os.environ['RICHTABLE_SQL_CONNECTION_PARAMS'])
-conn_str = f"mssql+pyodbc:///?odbc_connect={params}"
+params = "DRIVER={ODBC Driver 17 for SQL Server};%s" % os.environ['RICHTABLE_SQL_CONNECTION_PARAMS']
+conn_str = "mssql+pyodbc:///?odbc_connect=%s" % urllib.parse.quote_plus(params)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = conn_str
 db.init_app(app)
