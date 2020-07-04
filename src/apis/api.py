@@ -1,7 +1,9 @@
 import os
 from flask import Flask
 from flask_restful import Api, Resource
+import config
 
+import config
 from sqlalchemy import create_engine
 import urllib
 from db import db
@@ -11,9 +13,9 @@ from db_operations import SqlServerOperations
 
 app = Flask(__name__)
 api = Api(app)
-sql_db_password = os.environ['RICHTABLE_SQL_PASS']
-params = urllib.parse.quote_plus("DRIVER={ODBC Driver 17 for SQL Server};SERVER=pc-sql01.database.windows.net;DATABASE=pc-sql01;UID=pc;PWD=" + sql_db_password)
-conn_str = "mssql+pyodbc:///?odbc_connect=%s" % params
+
+params = urllib.parse.quote_plus(os.environ['RICHTABLE_SQL_CONNECTION_PARAMS'])
+conn_str = f"mssql+pyodbc:///?odbc_connect={params}"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = conn_str
 db.init_app(app)
@@ -23,13 +25,13 @@ engine = db.get_engine(app)
 db_operations = SqlServerOperations(engine)
 
 menu_operations = MenuOperations(db_operations)
-api.add_resource(MenuController, '/api/menu', resource_class_args=(menu_operations,))
+api.add_resource(MenuController, '/apis/menu', resource_class_args=(menu_operations,))
 
 food_type_operations = FoodTypeOperations(db_operations)
-api.add_resource(FoodTypeController, '/api/food_type', resource_class_args=(food_type_operations,))
+api.add_resource(FoodTypeController, '/apis/food_type', resource_class_args=(food_type_operations,))
 
 menu_category_operations = MenuCategoryOperations(db_operations)
-api.add_resource(MenuCategoryController, '/api/menu_category', resource_class_args=(menu_category_operations,))
+api.add_resource(MenuCategoryController, '/apis/menu_category', resource_class_args=(menu_category_operations,))
 
 
 if __name__ == '__main__':
