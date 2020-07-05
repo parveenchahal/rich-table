@@ -28,9 +28,12 @@ class Operations(object):
         quert_result = session.query(model).all()
         return quert_result
 
-    def _update(self, model_obj, session=None):
+    def _update(self, model, filter_param, json_data, session=None):
         def update_callback(session):
-            pass
+            query_set = session.query(model).filter(filter_param)
+            if(query_set.first() is None):
+                raise ValueError("id not found")
+            query_set.update(json_data)
 
         if(session is None):
             self.__create_and_commit_session(update_callback)

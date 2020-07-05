@@ -16,6 +16,11 @@ class Controller(Resource):
         result = self.operations.insert(json_data)
         return result, 201
 
+    def put(self):
+        json_data = request.get_json(force=True)
+        result = self.operations.update(json_data)
+        return result, 200
+
     def delete(self):
         args = request.args
         id = args['id']

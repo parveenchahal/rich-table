@@ -17,5 +17,12 @@ class MenuCategoryOperations(Operations):
     def get_all(self):
         return super()._get_all(MenuCategoryDbModel)
 
+    def update(self, json_obj):
+        id = json_obj['id']
+        if(id is None):
+            raise ValueError("id cannot be null or empty")
+        del json_obj["id"]
+        super()._update(MenuCategoryDbModel, MenuCategoryDbModel.id == id, json_obj)
+
     def delete(self, id):
         super()._delete(MenuCategoryDbModel, MenuCategoryDbModel.id == id)

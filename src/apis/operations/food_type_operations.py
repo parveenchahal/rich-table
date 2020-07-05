@@ -17,5 +17,12 @@ class FoodTypeOperations(Operations):
     def get_all(self):
         return super()._get_all(FoodTypeDbModel)
 
+    def update(self, json_obj):
+        id = json_obj['id']
+        if(id is None):
+            raise ValueError("id cannot be null or empty")
+        del json_obj["id"]
+        super()._update(FoodTypeDbModel, FoodTypeDbModel.id == id, json_obj)
+
     def delete(self, id):
         super()._delete(FoodTypeDbModel, FoodTypeDbModel.id == id)
