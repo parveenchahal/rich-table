@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float
 from models.db_models.db_model import DbModel
 
+
 class MenuItemsDbModel(DbModel):
     __tablename__ = 'menu_items'
 

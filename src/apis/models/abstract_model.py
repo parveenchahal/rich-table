@@ -1,8 +1,9 @@
 from sqlalchemy.orm.state import InstanceState
 import copy
-from json import JSONEncoder 
+from json import JSONEncoder
 from dataclasses import fields
 from flask import jsonify
+
 
 class Model(object):
 
@@ -13,7 +14,7 @@ class Model(object):
     @staticmethod
     def to_obj_list(list_of_dict, model_class_ref):
         return ([model_class_ref.to_obj(item) for item in list_of_dict])
-    
+
     def to_dict(self):
         d = copy.deepcopy(self.__dict__)
         try:
@@ -31,7 +32,8 @@ class Model(object):
         for field in fields(self):
             attr = getattr(self, field.name)
             if attr is not None and not isinstance(attr, field.type):
-                error_msg = "Expected type of {0.name} is {1}, given {0.type}".format(field, type(attr))
+                error_msg = "Expected type of {0.name} is {1}, given {0.type}".format(
+                    field, type(attr))
                 raise ValueError(error_msg)
 
     def __post_init__(self):

@@ -2,6 +2,7 @@ from operations.abstract_operations import Operations
 from models.db_models import MenuItemsDbModel, MenuByCategoryDbModel, MenuByFoodTypeDbModel
 from models.view_models import MenuViewModel
 
+
 class MenuOperations(Operations):
 
     def __init__(self, db_operations):
@@ -18,31 +19,34 @@ class MenuOperations(Operations):
         session = self.db_operations.create_session()
         try:
             menu_item = MenuItemsDbModel(**dict(json_obj))
-            
-            session.add(menu_item)
+            super()._insert(menu_item, session=session)
             session.flush()
-
             if(menu_item.id is None):
-                raise 'Can not write in {0} table'.format(MenuItemsDbModel.__tablename__)
+                raise 'Can not write in {0} table'.format(
+                    MenuItemsDbModel.__tablename__)
 
-            menu_category = [MenuByCategoryDbModel(menu_category_id=x, menu_item_id=menu_item.id) for x in menu_category]
-            food_type = [MenuByFoodTypeDbModel(food_type_id=x, menu_item_id=menu_item.id) for x in food_type]
-            
+            menu_category = [MenuByCategoryDbModel(
+                menu_category_id=x, menu_item_id=menu_item.id) for x in menu_category]
+            food_type = [MenuByFoodTypeDbModel(
+                food_type_id=x, menu_item_id=menu_item.id) for x in food_type]
+
             for x in menu_category:
-                session.add(x)
+                super()._insert(x, session=session)
 
             for x in food_type:
-                session.add(x)
+                super()._insert(x, session=session)
 
             session.flush()
 
             for x in menu_category:
                 if(x.id is None):
-                    raise "Error writing in {0}".format(MenuByCategoryDbModel.__tablename__)
+                    raise "Error writing in {0}".format(
+                        MenuByCategoryDbModel.__tablename__)
 
             for x in food_type:
                 if(x.id is None):
-                    raise "Error writing in {0}".format(MenuByFoodTypeDbModel.__tablename__)
+                    raise "Error writing in {0}".format(
+                        MenuByFoodTypeDbModel.__tablename__)
 
             session.commit()
             return menu_item.id
@@ -54,15 +58,19 @@ class MenuOperations(Operations):
         pass
 
     def delete(self, id):
+        session = self.db_operations.create_session()
         try:
-            super().delete_all(MenuByCategoryDbModel, MenuByCategoryDbModel.menu_item_id == id)
-            super().delete_all(MenuByFoodTypeDbModel, MenuByFoodTypeDbModel.menu_item_id == id)
+            super()._delete_all(MenuByCategoryDbModel,
+                                MenuByCategoryDbModel.menu_item_id == id, session=session)
+            super()._delete_all(MenuByFoodTypeDbModel,
+                                MenuByFoodTypeDbModel.menu_item_id == id, session=session)
+            super()._delete(MenuItemsDbModel, MenuItemsDbModel.id == id, session=session)
         except:
-            pass
-        super().delete_all(MenuItemsDbModel, MenuItemsDbModel.id == id)
+            session.rollback()
+            raise
 
     def get_all(self):
-        quert_result = self.db_operations.execute_query(MenuViewModel.__query__)
+        quert_result = self.db_operations.execute_query(
+            MenuViewModel.__query__)
         result = MenuViewModel.parse_query_output(quert_result)
         return result
-
