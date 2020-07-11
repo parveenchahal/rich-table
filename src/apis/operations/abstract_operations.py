@@ -37,7 +37,10 @@ class Operations(object):
         session = self.db_operations.create_session()
         query = session.query(model)
         if(filter_param is not None):
-            query = query.filter(filter_param)
+            if(not isinstance(filter_param, (list, tuple,))):
+                filter_param = [filter_param,]
+            for f in filter_param:
+                query = query.filter(f)
         return query.all()
 
     def _insert(self, model_obj, session=None):
@@ -51,7 +54,12 @@ class Operations(object):
 
     def _update(self, model, filter_param, json_data, session=None):
         def update_callback(session):
-            query_set = session.query(model).filter(filter_param)
+            nonlocal filter_param
+            if(not isinstance(filter_param, (list, tuple,))):
+                filter_param = [filter_param,]
+            query_set = session.query(model)
+            for f in filter_param:
+                query_set = query_set.filter(f)
             if(query_set.first() is None):
                 raise ValueError("id not found")
             query_set.update(json_data)
@@ -63,7 +71,17 @@ class Operations(object):
 
     def _delete(self, model, filter_param, session=None):
         def delete_callback(session):
-            row = session.query(model).filter(filter_param).first()
+            nonlocal filter_param
+            if(not isinstance(filter_param, (list, tuple,))):
+                filter_param = [filter_param,]
+            query = session.query(model)
+            for f in filter_param:
+                query = query.filter(f)
+            rows = query.all()
+            if(not rows):
+                raise KeyError("id not found")
+            for row in rows:
+                session.delete(row)
             if(not row):
                 raise KeyError("id not found")
             session.delete(row)
@@ -72,16 +90,3 @@ class Operations(object):
             self.__create_and_commit_session(delete_callback)
         else:
             delete_callback(session)
-
-    def _delete_all(self, model, filter_param, session=None):
-        def delete_all_callback(session):
-            rows = session.query(model).filter(filter_param).all()
-            if(not rows):
-                raise KeyError("id not found")
-            for row in rows:
-                session.delete(row)
-
-        if(session is None):
-            self.__create_and_commit_session(delete_all_callback)
-        else:
-            delete_all_callback(session)

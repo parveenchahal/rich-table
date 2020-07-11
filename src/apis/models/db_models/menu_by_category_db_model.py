@@ -7,8 +7,7 @@ from models.db_models.menu_items_db_model import MenuItemsDbModel
 class MenuByCategoryDbModel(DbModel):
     __tablename__ = 'menu_by_category'
 
-    id = Column(Integer, primary_key=True)
     menu_category_id = Column(Integer, ForeignKey(
-        "{0}.id".format(MenuCategoryDbModel.__tablename__)))
+        "{0}.id".format(MenuCategoryDbModel.__tablename__)), primary_key=True, autoincrement=False)
     menu_item_id = Column(Integer, ForeignKey(
-        "{0}.id".format(MenuItemsDbModel.__tablename__)))
+        "{0}.id".format(MenuItemsDbModel.__tablename__)), primary_key=True, autoincrement=False)
