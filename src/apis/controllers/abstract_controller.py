@@ -7,7 +7,9 @@ class Controller(Resource):
         self.operations = operations
 
     def get(self):
-        items = self.operations.get_all()
+        args = request.args
+        id = args.get('id')
+        items = self.operations.get(id)
         items = ([item.to_dict() for item in items])
         return output_json(items, 200, {'Content-Type': 'application/json'})
 

@@ -8,6 +8,14 @@ class MenuOperations(Operations):
     def __init__(self, db_operations):
         super().__init__(db_operations)
 
+    def get(self, id=None):
+        query = MenuViewModel.__query__
+        if(id is not None):
+            query = MenuViewModel.__query_with_id_filter__.replace('?', id, 2)
+        query_result = self.db_operations.execute_query(query)
+        result = MenuViewModel.parse_query_output(query_result)
+        return result
+
     def insert(self, json_obj):
         # removing this because it is auto generated.
         json_obj['id'] = None
@@ -68,9 +76,3 @@ class MenuOperations(Operations):
         except:
             session.rollback()
             raise
-
-    def get_all(self):
-        quert_result = self.db_operations.execute_query(
-            MenuViewModel.__query__)
-        result = MenuViewModel.parse_query_output(quert_result)
-        return result

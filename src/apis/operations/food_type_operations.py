@@ -14,8 +14,11 @@ class FoodTypeOperations(Operations):
         super()._insert(food_type)
         return food_type.id
 
-    def get_all(self):
-        return super()._get_all(FoodTypeDbModel)
+    def get(self, id=None):
+        if(id is None):
+            return super()._get(FoodTypeDbModel)
+        else:
+            return super()._get(FoodTypeDbModel, FoodTypeDbModel.id == id)
 
     def update(self, json_obj):
         id = json_obj['id']

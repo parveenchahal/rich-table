@@ -6,19 +6,23 @@ from typing import List
 
 @dataclass
 class MenuViewModel(Model):
-    __query__ = '(SELECT m.id, m.name, m.price, m.image_url, mc.id as menu_category, NULL as food_type from {0} m '\
-        'left join {1} mbc on m.id = mbc.menu_item_id '\
-        'left join {2} mc on mbc.menu_category_id = mc.id) '\
-        'UNION ALL '\
-        '(SELECT m.id, m.name, m.price, m.image_url, NULL as menu_category, ft.id as food_type from {3} m '\
-        'left join {4} mbft on m.id = mbft.menu_item_id '\
-        'left join {5} ft on mbft.food_type_id = ft.id) '.format(
-            MenuItemsDbModel.__tablename__,
-            MenuByCategoryDbModel.__tablename__,
-            MenuCategoryDbModel.__tablename__,
-            MenuItemsDbModel.__tablename__,
-            MenuByFoodTypeDbModel.__tablename__,
-            FoodTypeDbModel.__tablename__)
+    __query__ = f'(SELECT m.id, m.name, m.price, m.image_url, mc.id as menu_category, NULL as food_type from {MenuItemsDbModel.__tablename__} m '\
+        f'left join {MenuByCategoryDbModel.__tablename__} mbc on m.id = mbc.menu_item_id '\
+        f'left join {MenuCategoryDbModel.__tablename__} mc on mbc.menu_category_id = mc.id) '\
+        f'UNION ALL '\
+        f'(SELECT m.id, m.name, m.price, m.image_url, NULL as menu_category, ft.id as food_type from {MenuItemsDbModel.__tablename__} m '\
+        f'left join {MenuByFoodTypeDbModel.__tablename__} mbft on m.id = mbft.menu_item_id '\
+        f'left join {FoodTypeDbModel.__tablename__} ft on mbft.food_type_id = ft.id) '
+    
+    __query_with_id_filter__ = f'(SELECT m.id, m.name, m.price, m.image_url, mc.id as menu_category, NULL as food_type from {MenuItemsDbModel.__tablename__} m '\
+        f'left join {MenuByCategoryDbModel.__tablename__} mbc on m.id = mbc.menu_item_id '\
+        f'left join {MenuCategoryDbModel.__tablename__} mc on mbc.menu_category_id = mc.id '\
+        f'where m.id = ?) '\
+        f'UNION ALL '\
+        f'(SELECT m.id, m.name, m.price, m.image_url, NULL as menu_category, ft.id as food_type from {MenuItemsDbModel.__tablename__} m '\
+        f'left join {MenuByFoodTypeDbModel.__tablename__} mbft on m.id = mbft.menu_item_id '\
+        f'left join {FoodTypeDbModel.__tablename__} ft on mbft.food_type_id = ft.id '\
+        f'where m.id = ?) '\
 
     id: int
     name: str

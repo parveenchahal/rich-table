@@ -14,8 +14,11 @@ class MenuCategoryOperations(Operations):
         super()._insert(menu_category)
         return menu_category.id
 
-    def get_all(self):
-        return super()._get_all(MenuCategoryDbModel)
+    def get(self, id=None):
+        if(id is None):
+            return super()._get(MenuCategoryDbModel)
+        else:
+            return super()._get(MenuCategoryDbModel, MenuCategoryDbModel.id == id)
 
     def update(self, json_obj):
         id = json_obj['id']

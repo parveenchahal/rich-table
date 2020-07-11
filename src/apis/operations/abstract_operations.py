@@ -1,9 +1,28 @@
 from models.db_models import MenuCategoryDbModel
+import abc
 
 
 class Operations(object):
     def __init__(self, db_operations):
         self.db_operations = db_operations
+
+############ Public methods ###################
+
+    @abc.abstractmethod
+    def get(self, id=None):
+        raise Exception("Method is not supported.")
+
+    @abc.abstractmethod
+    def insert(self, json_obj):
+        raise Exception("Method is not supported.")
+
+    @abc.abstractmethod
+    def update(self, json_obj):
+        raise Exception("Method is not supported.")
+
+    @abc.abstractmethod
+    def delete(self, id):
+        raise Exception("Method is not supported.")
 
 ############ Private methods ##################
 
@@ -12,7 +31,14 @@ class Operations(object):
         callback(session)
         session.commit()
 
-############ Protected Methods ##################
+############ Protected Methods ################
+
+    def _get(self, model, filter_param=None):
+        session = self.db_operations.create_session()
+        query = session.query(model)
+        if(filter_param is not None):
+            query = query.filter(filter_param)
+        return query.all()
 
     def _insert(self, model_obj, session=None):
         def insert_callback(session):
@@ -22,11 +48,6 @@ class Operations(object):
             self.__create_and_commit_session(insert_callback)
         else:
             insert_callback(session)
-
-    def _get_all(self, model):
-        session = self.db_operations.create_session()
-        quert_result = session.query(model).all()
-        return quert_result
 
     def _update(self, model, filter_param, json_data, session=None):
         def update_callback(session):
