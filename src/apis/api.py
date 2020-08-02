@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 import urllib
 from db import db
 from operations import Operations, MenuOperations, FoodTypeOperations, MenuCategoryOperations
-from controllers import Controller, MenuController, FoodTypeController, MenuCategoryController
+from controllers import Controller, Login, MenuController, FoodTypeController, MenuCategoryController
 from db_operations import SqlServerOperations
 
 app = Flask(__name__)
@@ -24,6 +24,8 @@ db.init_app(app)
 engine = db.get_engine(app)
 
 db_operations = SqlServerOperations(engine)
+
+api.add_resource(Login, '/login', '/auth')
 
 menu_operations = MenuOperations(db_operations)
 api.add_resource(MenuController, '/apis/menu',
