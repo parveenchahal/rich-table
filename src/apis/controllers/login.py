@@ -16,12 +16,13 @@ class Login(Controller):
         return redirect(config.LoginURL, code=302)
 
     def __auth(self, args: dict):
-        session = args.get("session", None) 
+        redirect_uri = args.get("state", config.BaseURL)
+        session = args.get("session", None)
         if session is not None:
-            s, sig = session.split(".")
-            expiry = int(json.loads(base64.b64decode(s))["expiry"])
+            header, session_payload, sig = session.split(".")
+            expiry = int(json.loads(base64.b64decode(session_payload))["expiry"])
             expiry = datetime.fromtimestamp(expiry, pytz.utc)
-            response = make_response(redirect(config.BaseURL, code=302))
+            response = make_response(redirect(redirect_uri, code=302))
             response.set_cookie('session', session, expires=expiry, secure=True, httponly=True)
             return response
         return "Session not found in params.", 403
