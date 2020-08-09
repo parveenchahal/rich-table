@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: richtable-apis-1
-        image: pchahal24/richtable:latest
+        image: pchahal24/richtable-apis:latest
         imagePullPolicy: Always
         ports:
           - name: port-5000
