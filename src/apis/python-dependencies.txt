@@ -2,3 +2,4 @@ pyodbc
 Flask
 Flask-RESTful
 Flask-SQLAlchemy
+jwt
