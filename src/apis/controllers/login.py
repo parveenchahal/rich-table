@@ -6,7 +6,7 @@ from flask_restful import request, original_flask_make_response as make_response
 import json
 from controllers import Controller
 import config
-from jwt.utils import base64url_decode as _base64url_decode
+from jwt.utils import b64decode as _b64decode
 
 class Login(Controller):
 
@@ -21,7 +21,7 @@ class Login(Controller):
         session = args.get("session", None)
         if session is not None:
             header, session_payload, sig = session.split(".")
-            expiry = int(json.loads(_base64url_decode(session_payload))["expiry"])
+            expiry = int(json.loads(_b64decode(session_payload))["expiry"])
             expiry = datetime.fromtimestamp(expiry, pytz.utc)
             response = make_response(redirect(redirect_uri, code=302))
             response.set_cookie('session', session, expires=expiry, secure=True, httponly=True)
