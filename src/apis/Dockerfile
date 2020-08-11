@@ -1,4 +1,4 @@
-FROM python:3.8.3-alpine
+FROM python:3.9.0b5-alpine3.12
 COPY . /app
 WORKDIR /app
 
@@ -8,7 +8,10 @@ RUN apk add curl
 RUN apk add jq
 RUN apk add g++
 RUN apk add --no-cache unixodbc-dev
-RUN pip3 install -r python-dependencies.txt
+RUN apk add libffi-dev
+RUN apk add libressl-dev
+RUN python -m pip install --upgrade pip
+RUN pip install -r python-dependencies.txt
 
 #Download the desired package(s)
 RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.5.2.2-1_amd64.apk
